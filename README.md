@@ -9,6 +9,8 @@ INSTRUCTIONS:
 
 1. Access the program through the Bash Terminal by typing command `node BamazonCustomer.js` and hitting `Enter`.
 
+![What you will see when you initiate the program](./assets/BamazonCustomer_Screenshot_01.jpg)
+
 2. You will see a prompt of 11 items you will be able to 'purchase' through the terminal, with the question: `What is the ID number of the item you would like to buy?`
 
     * The ID number is the corresponding number on the leftmost side of the item description. Type the number of the product you want to purchase, then press `Enter`.
@@ -16,6 +18,8 @@ INSTRUCTIONS:
     * You will receive an error message (`ID Number does not exist! Try again`) if the ID number you refer to is not within the parameters of the 11 items currently listed. 
 
     * Otherwise, you will receive a confirmation message (`We have that item for you!`), and you will move on to the next step.
+
+![What you will see when you correctly identify the id number of the product you want](./assets/BamazonCustomer_Screenshot_02.jpg)
 
 3. Bamazon will show you a rudimentary description of the item in question, including the quantity of the item in stock. The "stock_quantity" is the limit of the specific item that you can purchase. From there, Bamazon will ask you the following: `How many units of this product would you like to buy?`
 
@@ -25,6 +29,10 @@ INSTRUCTIONS:
 
     * Otherwise, you will receive a confirmation message on the number of items you purchased, and you will get an updated stock quantity. 
 
-4. Afterwards, you will be asked if you would like to make another purchase. If you type `YES`, you will be taken back to the Bamazon Inventory, to make another selection. If you type `NO`, your Bamazon experience ends ... forever. 
+4. Afterwards, you will be asked if you would like to make another purchase. If you type `YES`, you will be taken back to the Bamazon Inventory, to make another selection -- and you will see the updated Bamazon inventory, complete with the new totals for the items you have previously purchased. If you type `NO`, your Bamazon experience ends ... forever. 
 
 (Or until you initialize the program again -- either/or.)
+
+![What you will see if you re-initiate the program](./assets/BamazonCustomer_Screenshot_03.jpg)
+
+![What you will see if you want to end the program](./assets/BamazonCustomer_Screenshot_04.jpg)
