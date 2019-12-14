@@ -25,22 +25,17 @@ function bamazonCustomerInit() {
             message: "What is the ID Number of the item you would like to buy?",
         })
         .then(function (answer) {
-            // based on their answer, either call the bid or the post functions
-            if (answer.BamazonID < 1) {
-                console.log("ID Number does not exist! Try again:");
-                console.log("-----------------------------------")
-                bamazonCustomerInit();
-            };
-            if (answer.BamazonID > 11) {
-                console.log("ID Number does not exist! Try again");
-                console.log("-----------------------------------")
-                bamazonCustomerInit();
-            };
-            //if (1 < answer.BamazonID < 11) {
-            if (answer.BamazonID > 1 && answer.BamazonID < 11) {
+            if (answer.BamazonID >= 1 && answer.BamazonID <= 11) {
                 console.log("We have that item for you!")
                 console.log("-----------------------------------")
                 bamazonCustomerHMU(answer.BamazonID);
+            }
+            else if (answer.BamazonID > 11 || answer.BamazonID < 1) {
+                console.log("ID Number does not exist! Try again");
+                console.log("-----------------------------------")
+                bamazonCustomerInit()
+            } else {
+                connection.end();
             }
         })
 }
@@ -69,30 +64,59 @@ function bamazonCustomerHMU(BamazonID) {
             //console.log(inventory[BamazonID - 1].stock_quantity)
             if ((0 < answer.BamazonUnits) && (answer.BamazonUnits < inventory[BamazonID - 1].stock_quantity)) {
                 console.log("Congratulations! You just ordered " + answer.BamazonUnits + " of your selected item! The new total in our inventory is: ")
-                bamazonCustomerNewInventory()
+                console.log("Hold on ...\nNodes are re-jiggering or whatever they do ...");
+                var query = connection.query(
+                    "UPDATE products SET ? where ?",
+                    [
+                        {
+                            stock_quantity: inventory[BamazonID - 1].stock_quantity - answer.BamazonUnits
+                        },
+                        {
+                            item_id: (BamazonID)
+                        }
+                    ],
+                    function (err, res) {
+                        if (err) throw err;
+                        console.log(res.affectedRows + " products updated!\n");
+                    }
+                );
+                console.log(query.sql);
+                console.log("-----------------------------------")
+                inquirer
+                    .prompt({
+                        name: "PlayAgain",
+                        type: "choices",
+                        message: "Would you like to make another purchase? (YES or NO)"
+                    }).then(function (answer) {
+                        if (answer.PlayAgain === "YES") {
+                            bamazonCustomerInit();
+                        } else if (answer.PlayAgain === "NO") {
+                            connection.end()
+                        }
+                    })
             }
         })
 }
 
-function bamazonCustomerNewInventory() {
-    console.log("Hold on ...\nNodes are re-jiggering or whatever they do ...");
-    var query = connection.query(
-        "UPDATE products SET ? where ?",
-        [
-            {
-                stock_quantity: 30
-            },
-            {
-                item_id: 6
-            }
-        ],
-        function (err, res) {
-            if (err) throw err;
-            console.log(res.affectedRows + " products updated!\n");
-        }
-    );
-    console.log(query.sql);
-}
+// function bamazonCustomerNewInventory() {
+//     console.log("Hold on ...\nNodes are re-jiggering or whatever they do ...");
+//     var query = connection.query(
+//         "UPDATE products SET ? where ?",
+//         [
+//             {
+//                 stock_quantity: 
+//             },
+//             {
+//                 item_id: 
+//             }
+//         ],
+//         function (err, res) {
+//             if (err) throw err;
+//             console.log(res.affectedRows + " products updated!\n");
+//         }
+//     );
+//     console.log(query.sql);
+// }
 
 function queryAllBamazonItems() {
     connection.query("SELECT * FROM bamazon.products", function (err, res) {
